@@ -1,0 +1,138 @@
+to check version of ubuntu lsb_release -a
+
+
+What is Ansible?
+Ansible is an open source automation and orchestration tool for software provisioning, configuration management, and software deployment. Ansible can easily run and configure Unix-like systems as well as Windows systems to provide infrastructure as code. It contains its own declarative programming language for system configuration and management.
+
+Ansible is popular for its simplicity of installation, ease of use in what concerns the connectivity to clients, its lack of agent for Ansible clients and the multitude of skills. It functions by connecting via SSH to the clients, so it doesn’t need a special agent on the client-side, and by pushing modules to the clients, the modules are then executed locally on the client-side and the output is pushed back to the Ansible server.
+
+Since it uses SSH, it can very easily connect to clients using SSH-Keys, simplifying though the whole process. Client details, like hostnames or IP addresses and SSH ports, are stored in files called inventory files. Once you have created an inventory file and populated it, ansible can use it.
+
+Why use Ansible?
+Here are some important pros/benefits of using Ansible
+
+One of the most significant advantages of Ansible is that it is free to use by everyone.
+It does not need any special system administrator skills to install and use Ansible, and the official documentation is very comprehensive.
+Its modularity regarding plugins, modules, inventories, and playbooks make Ansible the perfect companion to orchestrate large environments.
+Ansible is very lightweight and consistent, and no constraints regarding the operating system or underlying hardware are present.
+It is also very secure due to its agentless capabilities and due to the use of OpenSSH security features.
+Another advantage that encourages the adoption of Ansible is its smooth learning curve determined by the comprehensive documentation and easy to learn structure and configuration.
+
+Important terms used in Ansible
+Ansible server:
+The machine where Ansible is installed and from which all tasks and playbooks will be ran
+
+Module:
+Basically, a module is a command or set of similar Ansible commands meant to be executed on the client-side
+
+Task:
+A task is a section that consists of a single procedure to be completed
+
+Role:
+A way of organizing tasks and related files to be later called in a playbook
+
+Fact:
+Information fetched from the client system from the global variables with the gather-facts operation
+
+Inventory:
+File containing data about the ansible client servers. Defined in later examples as hosts file
+
+Play:
+Execution of a playbook
+
+Handler:
+Task which is called only if a notifier is present
+
+Notifier:
+Section attributed to a task which calls a handler if the output is changed
+
+Tag:
+Name set to a task which can be used later on to issue just that specific task or group of tasks.
+Some common words related to Ansible.
+Service/Server − A process on the machine that provides the service.
+
+Machine − A physical server, vm(virtual machine) or a container.
+
+Target machine − A machine we are about to configure with Ansible.
+
+Task − An action(run this, delete that) etc managed by Ansible.
+
+Playbook − The yml file where Ansible commands are written and yml is executed on a machine.
+
+Installation through Apt on Ubuntu Machine
+For installing Ansible you have to configure PPA on your machine. For this, you have to run the following line of code −
+
+$ sudo apt-get update 
+$ sudo apt-get install software-properties-common 
+$ sudo apt-add-repository ppa:ansible/ansible $ sudo apt-get update 
+$ sudo apt-get install ansible
+After running the above line of code, you are ready to manage remote machines through Ansible. Just run Ansible–version to check the version and just to check whether Ansible was installed properly or not.
+
+
+
+Adding Controls to Loops
+Limit Loop Output
+Pause a Loop
+Track Progress of A Loop
+1. Limiting Loop Output
+If we want to limit the output of the Ansible-playbook which is generating a huge amount of output on the console, we can use ‘label’ directive with ‘loop_control’. For example, we have to create multiple servers with some standard configuration and ansible-playbook is going to output all details with its name however we want to keep our output clean and only interested in the name of the server to be displayed as a console output. Here is another example:
+
+DATA SCIENTIST Course Bundle - 150 Courses in 1
+
+837+ Hours of HD Videos | 150 Courses | Verifiable Certificate of Completion | Lifetime Access
+4.8
+Code:
+
+- name: add multiple users
+user:
+name: “{{ item.name }}”
+state: present
+group: “{{item.groups}}”
+loop:
+- { name: ‘user1’, groups: ‘SRE’ }
+- { name: ‘user2’, groups: ‘dbadmin’ }
+loop_control:
+label: "{{ item.name }}"
+
+Output-1.8
+Code Explanation: We have an example that is used in the explanation of ‘Iterate over a list of hashes’ except added loop_control and you can see the difference as it is only showing users name, not the group name in the output.
+
+2. Pause a Loop
+In some scenarios, we have to give some time for the first command to complete before executing the next one. We use the ‘pause’ directive with loop_control. It is like using sleep in some programming language like PowerShell.
+
+Code:
+- name: pause for 5 secs after each file creation
+digital_ocean:
+name: "{{ item }}"
+state: present
+loop:
+- file3.txt
+- file4.txt
+loop_control:
+pause: 5
+
+Output:
+
+Output-1.9
+3. Track Progress of A Loop
+If we want to curiously know how many items have been executed in a loop, we can use ‘index_var’ directive with ‘loop_control’.For example:
+
+Code:
+- name: count the fruits
+debug:
+msg: "{{ item }} with index {{ my_idx }}"
+loop:
+- kiwi
+- papaya
+- pear
+loop_control:
+index_var: my_id
+
+Output:
+
+Output-1.10Conclusion – Ansible Loop
+The loop is available after Ansible version 2.5 or higher and it is recommended to use loop however it is not a full replacement of with_<look>. Syntax of ‘with_<lookup> is still valid. Also sometimes it is better to directly pass the list to a parameter.
+
+
+
+

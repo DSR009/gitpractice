@@ -1,0 +1,204 @@
+if you want to copy content of a file to anothe file without overriding use
+
+cat file.txt >> file1.txt
+cat <sourcefile> >> destination file
+
+EC2 server
+==========
+- AMI (OS)
+- Type (Capacity)
+- key (private password)
+- Network (Security Group)
+- Storage 
+
+Mumbai Region -> Default Network -> Default Security Group
+FQDN - Fully Qualified Domain Name
+
+whoami = the user name
+hostname = machine name
+hostname -i = ip address
+free -m = available memory
+df -kh . = available hard disk
+lscpu = available cpu
+cat /etc/os-release = gives the os details
+sudo su = switch the user to root
+
+============
+TERRAFORM
+============
+- Prone to errors
+- not scalable
+- not optimized way of using
+- immutable infra
+- not cloud agnostic
+
+IAC:
+ * desired state as a file/code
+ * version the code/file
+ * review & reuse the code/file
+
+$ sudo hostnamectl set-hostname <machinename>
+
+Install through Package:
+ $ curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+ $ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+ $ sudo apt-get update && sudo apt-get install terraform
+
+Install specific version:
+below command is used to install teraform with particular version with ziped file
+ $ curl -O https://releases.hashicorp.com/terraform/0.15.2/terraform_0.15.2_linux_amd64.zip https://releases.hashicorp.com/terraform/
+
+below command is used instal unzip plugin (like windows have unzip app)
+ $ sudo apt install -y unzip 
+
+below command is used  unzip file which you want (like windows have unzip app)
+ $ sudo unzip terraform_0.15.2_linux_amd64.zip -d /usr/local/bin/
+
+------------------TERRAFORM AWS SETUP----------
+1. Passing access/secret key as environment variables 
+*eniviroment variables available in that session only if you exist then it won't be available.to over come this we can place access keys in .bashrc file which will be calling when ever ssh is called through that file.it available in home !/.bashrc
+
+$ export AWS_ACCESS_KEY_ID=AKIA5D6RLJALBXCLMN7Q
+$ export AWS_SECRET_ACCESS_KEY= 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
+
+--> env is used list all enviroment variables $env
+2. Passing access/secret key through a credentials file
+
+-->Install AWS Cli: 
+Cli -- commmand line interface -- utilite which used to connect to aws
+
+ $ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+ $ sudo apt install unzip && unzip awscliv2.zip
+ $ sudo ./aws/install --bin-dir /usr/bin --install-dir /usr/bin/aws-cli --update
+ $ aws --version
+
+Configure AWS Cli with Access/Secret Key
+ $ aws configure
+ubuntu@Teraformcore:~$ aws configure
+AWS Access Key ID [None]: AKIA5D6RLJALBXCLMN7Q
+AWS Secret Access Key [None]: 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
+Default region name [None]: ap-south-1
+Default output format [None]: json
+
+   - creates ~/.aws/credentials file
+
+
+Access Key: AKIA5D6RLJALBXCLMN7Q
+Secret Key : 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
+
+
+Provisioners
+============
+# If we want to do some initial configuration the server
+# If we want to copy some files to the server
+# If we want to run some command or script inside the server
+# If we want to run some command or script on the terraform core server
+- Provisioner blocks are child blocks for resource blocks
+
+Resource:
+ * creation time provisioner (default)
+   - first resource will get created
+   - provisioner will be called
+ * destroy time provisioner
+   - provisioner will be called first
+   - resource will be destroyed at last
+
+Local-exec Provisioner
+----------------------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+# Specify the EC2 details
+resource "aws_instance" "example" {
+  ami           = "ami-0c1a7f89451184c8b"
+  instance_type = "t2.micro"
+ 
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.example.private_ip} >> private_ips.txt"
+  }
+  provisioner "local-exec" {
+    command = "exit 1"
+    on_failure = continue
+  }
+  provisioner "local-exec" {
+    when = destroy
+    command = "rm private_ips.txt"
+  }  
+}
+
+FILE PROVISIONER
+-----------------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0c1a7f89451184c8b"
+  instance_type = "t2.micro"
+  key_name      = "masterjul23" 
+
+copy the pem file to local ubuntu from local machine and give all access to that file
+
+test.conf is configuration which is available in local machine and copying that file into remote machine by destination
+and the which i copying will be available were host it can be any machice which we created.
+
+  provisioner "file" {
+    source      = "test.conf"
+    destination = "/tmp/myapp.conf"
+  }
+this block is used for connecting the machine like how we connect through ssh from our to aws linux machine
+  connection {
+    type     = "ssh"
+    user     = "ubuntu"
+    private_key = file("masterjul23.pem")
+    host     = self.public_ip
+  }
+}
+
+REMOTE-EXEC
+-----------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0c1a7f89451184c8b"
+  instance_type = "t2.micro"
+  key_name      = "masterjul23"
+
+  provisioner "local-exec" {
+    command    = "echo 'while true; do echo hi-students; sleep 5; done' > myscript.sh"
+  }
+ 
+  provisioner "file" {
+    source      = "myscript.sh"
+    destination = "/tmp/myscript.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/myscript.sh",
+      "nohup /tmp/myscript.sh 2>&1 &",
+    ]
+  }
+
+  connection {
+    type     = "ssh"
+    user     = "ubuntu"
+    private_key = file("masterjul23.pem")
+    host     = self.public_ip
+  }
+}
+
+NULL RESOURCE
+-------------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "null_resource" "dummy" {
+  provisioner "local-exec" {
+    command = "touch MYFILE"
+  }
+}

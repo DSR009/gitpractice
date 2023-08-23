@@ -1,0 +1,208 @@
+ 1  sudo apt update && sudo apt -y install docker.io
+    2  clear
+    3  curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23.7/bin/linux/amd64/kubectl && chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl
+    4  curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.23.2/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+    5  sudo apt install conntrack
+    6  clear
+    7  minikube start --vm-driver=none
+    8  sudo mv /root/.kube /root/.minikube $HOME
+    9  minikube status
+   10  kubectl get pods
+   11  kubectl grt nodes
+   12  kubectl get nodes
+   13  kubectl describe node ip-172-31-3-230
+   14  clear
+   15  vi pod.yml
+   16  kubectl apply -f pod.yml
+   17  kubectl get pods
+   18  kubectl get pods -o wide
+   19  kubectl describe pod testpod
+   20  kubectl logs -f testpod
+   21  ls
+   22  kubectl get pods
+   23  kubectl  exec testpod -- ps -ef
+   24  kubectl logs -f testpod
+   25  kubectl describe pod testpod
+   26  minikube status
+   27  kubectl delete -f pod.yml
+   28  kubectl grt pods
+   29  kubectl get pods
+   30  clear
+   31  vi pod1.yml
+   32  ls
+   33  kubectl apply -f pod1.yml
+   34  vi pod1.yml
+   35  kubectl apply -f pod1.yml
+   36  vi pod1.yml
+   37  kubectl apply -f pod1.yml
+   38  vi pod1.yml
+   39  kubectl apply -f pod1.yml
+   40  kubectl apply -f pod.yml
+   41  vi pod1.yml
+   42  cat pod.yml
+   43  cat pod1.yml
+   44  kubectl delete -f pod.yml
+   45  vi pod1.yml
+   46  kubectl apply -f pod1.yml
+   47  kubectl get pods
+   48  kubectl get pods -o wide
+   49  kubectl describe pod testpod2
+   50  kubectl get pods
+   51  kubectl get pods -o wide
+   52  kubectl describe pod testpod2
+   53  kubectl get pods
+   54  kubectl logs -f testpod2 -c co1
+   55  kubectl logs -f testpod2 -c c01
+   56  kubectl logs -f testpod2 -c c00
+   57  ls
+   58  kubectl delete -f pod1.yml
+   59  vi pod2.yml
+   60  kubectl apply -f pod2.yml
+   61  vi pod2.yml
+   62  kubectl apply -f pod2.yml
+   63  vi pod2.yml
+   64  kubectl apply -f pod2.yml
+   65  vi pod2.yml
+   66  kubectl apply -f pod2.yml
+   67  kubectl get pods
+   68  kubectl describe pods environmentsy
+   69  kubectl describe pods environments
+   70  kubectl get pods
+   71  kubectl describe pod environments
+   72  kubectl exec environments -- ps -ef
+   73  kubectl exec environments --env
+   74  kubectl exec environments -- env
+   75  ls
+   76  kubectl delete -f pod2.yml
+   77  ls
+   78  kubectl get pods
+   79  kubectl get nodes
+   80  kubectl get ns
+   81  vi pod3.yml
+   82  kubectl apply -f pod3.yml
+   83  kubectl get pods
+   84  kubectl describe portexpose
+   85  kubectl describe pod  portexpose
+   86  kubectl grt pods
+   87  kubectl get pods
+   88  minikude status
+   89  ls
+   90  minikude status
+   91  minikube status
+   92  kubectl delete -f deploy.yml
+   93  kubectl apply -f deploy.y
+   94  kubectl delete -f mydeploy-67df678766-n9dhb
+   95  kubectl delete pod mydeploy-67df678766-n9dhb
+   96  kubectl delete pod mydeploy-67df678766-w9rhl
+   97  kubectl get pods
+   98  clear
+   99  kubectl get pods -- watch
+  100  kubectl get pods --watch
+  101  ls
+  102  kubectl get pods --watch
+  103  clear
+  104  kubectl get pods --watch
+  105  clear
+  106  kubectl get pods --watch
+  107  kubectl get rs
+  108  clear
+  109  kubectl get rs
+  110  kubectl get pods
+  111  minukube start --vm-driver=none
+  112  minikube start --vm-driver=none
+  113  minikube status
+  114  clear
+  115  kubectl get pods
+  116  kubectl get pods -o wide
+  117  kubectl get svc
+  118  curl 10.100.123.20:80
+  119  clear
+  120  kubectl get pods -o wide
+  121  kubectl get svc
+  122  kubectl exec mydeploy-5858c7658d-lbxrk -it -- /bin/bash
+  123  kubectl exec mydeploy-5858c7658d-m46vf -it -- /bin/bash
+  124  curl 172.17.0.2:80
+  125  curl 172.17.0.4:80
+  126  curl 10.100.123.20:80
+  127  clear
+  128  kubectl get svc
+  129  kubectl describe svc demoservice
+  130  vi svc.yml
+  131  kubectl apply -f svc.yml
+  132  kubectl describe svc demoservice
+  133  kubectl get svc
+  134  curl 10.100.123.20:80
+  135  kubectl delete -f svcpod.yml
+  136  kubectl get pods
+  137  kubectl delete -f svc.yml
+  138  kubectl get svc
+  139  kubectl get pods
+  140  clear
+  141  vi live.yml
+  142  kubectl apply -f live.yml
+  143  vi live.yml
+  144  kubectl apply -f live.yml
+  145  vi live.yml
+  146  kubectl apply -f live.yml
+  147  vi live.yml
+  148  kubectl apply -f live.yml
+  149  kubectl get pods
+  150  kubectl get pods -o wide
+  151  vi live.yml
+  152  kubectl get pods
+  153  vi live.yml
+  154  kubectl apply -f live.yml
+  155  kubectl get pods
+  156  kubectl get pods -o wide
+  157  kubectl get pods
+  158  kubectl describe pods
+  159  kubectl get pods
+  160  kubectl exec mylivehealth-bbf966ff5-6rn8s -it -- /bin/bash
+  161  kubectl get pods
+  162  kubectl describe mylivehealth-bbf966ff5-6rn8s
+  163  kubectl get pods
+  164  kubectl describe pod mylivehealth-bbf966ff5-6rn8s
+  165  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | tail
+  166  clear
+  167  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | tail
+  168  kubectl get pods
+  169  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | tail
+  170  kubectl get pods
+  171  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | tail
+  172  kubectl get pods
+  173  kubectl get pods -o wide
+  174  kubectl get pods
+  175  clear
+  176  kubectl describe mylivehealth-bbf966ff5-6rn8s | tail
+  177  kubectl describe mylivehealth-bbf966ff5-6rn8s
+  178  kubectl get pods
+  179  kubectl describe pod mylivehealth-bbf966ff5-6rn8s
+  180  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | taul
+  181  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | tail
+  182  clear
+  183  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | tail
+  184  kubectl get pods
+  185  kubectl exec mylivehealth-bbf966ff5-6rn8s touch /tmp/lp
+  186  kubectl exec mylivehealth-bbf966ff5-6rn8s -it --/bin/bash
+  187  kubectl exec mylivehealth-bbf966ff5-6rn8s -it --/ bin/bash
+  188  kubectl exec mylivehealth-bbf966ff5-6rn8s -it -- /bin/bash
+  189  kubectl get pods
+  190  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | tail
+  191  kubectl get pods
+  192  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | tail
+  193  kubectl exec mylivehealth-bbf966ff5-6rn8s -it -- /bin/bash
+  194  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | tail
+  195  kubectl get pods
+  196  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | tail
+  197  clear
+  198  kubectl describe pod mylivehealth-bbf966ff5-6rn8s | tail
+  199  kubectl describe pod mylivehealth-bbf966ff5-6rn8s
+  200  kubectl get pods
+  201  kubectl get pods -o wide
+  202  curl 172.17.0.4:80
+  203  kubectl delete -f live.yml
+  204  kubectl get pods -o wide
+  205  kubectl get pods
+  206  clear
+  207  ls history
+  208  history
